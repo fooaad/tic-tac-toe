@@ -23,7 +23,7 @@ class AiPlayer(Player):
     
     def get_move(self, game):
         if len(game.available_moves()) == 9:
-            return 4 # always pick the center of the board in the first move
+            return random.choice(game.available_moves())
         else:
             return self.minimax(game, self.letter)
     
@@ -75,6 +75,7 @@ class HumanPlayer(Player):
             position = input('Your Turn. Input move (1-9): ')
             try:
                 val = int(position)
+                val -= 1
                 if val not in game.available_moves():
                     raise ValueError
                 valid_position = True

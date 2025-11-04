@@ -1,3 +1,5 @@
+import time
+
 from player import HumanPlayer, AiPlayer
 class TicTacToe():
     def __init__(self):
@@ -13,16 +15,17 @@ class TicTacToe():
             row = self.board[start:end]
             # ' | '.join(row) joins all elements in the row with " | " between them.
             print('| ' + ' | '.join(row) + ' |')
+        print('')
 
     def available_moves(self):
         ret = []
-        for i in self.board:
-            if i == ' ' :
+        for i in range(9):
+            if self.board[i] == ' ' :
                 ret.append(i)
         return ret
 
-    def make_move(self, square, letter):
-        self.board[square] = letter
+    def make_move(self, position, letter):
+        self.board[position] = letter
         if self.is_winner(letter):
             self.current_winner = letter
 
@@ -44,29 +47,24 @@ class TicTacToe():
             if ret == True:
                 return ret
         # check diagonals
-        ret = True
-        for i in self.board[0, 4, 8]:
-            if i != letter:
-                ret = False
-        if ret == True:
-            return ret
-        
-        # check second diagonals
-        ret = True
-        for i in self.board[2, 4, 6]:
-            if i != letter:
-                ret = False
-        if ret == True:
-            return ret
+        if all(self.board[i] == letter for i in (0, 4, 8)):
+            return True
+
+        if all(self.board[i] == letter for i in (2, 4, 6)):
+            return True
         
         return False
 
 
 def play(game, x, o):
     print('''Welcome to Tic-Tac-Toe!
-    | 1 | 2 | 3 |
-    | 4 | 5 | 6 |
-    | 7 | 8 | 9 |''')
+          
+| 1 | 2 | 3 |
+| 4 | 5 | 6 |
+| 7 | 8 | 9 |
+          
+X goes first.
+          ''')
 
     letter = 'X'
 
@@ -76,14 +74,18 @@ def play(game, x, o):
         else:
             position = o.get_move(game)
 
-        if game.make_move(position, letter):
-            game.print_board()
+        game.make_move(position, letter)
+        relative_position = position + 1
+        print(letter + ' makes a move to position {}'.format(relative_position))
+        game.print_board()
 
-            if game.current_winner:
-                print(letter + ' wins!!!')
-                return letter
+        if game.current_winner:
+            print(letter + ' wins!!!')
+            return letter
             
         letter = 'O' if letter == 'X' else 'X'  # switches player
+
+        time.sleep(.8)
     
     print('It\'s a tie!')
 
