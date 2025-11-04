@@ -62,3 +62,23 @@ class AiPlayer(Player):
             game.current_winner = None
         
         return best['position']
+    
+
+class HumanPlayer(Player):
+    def __init__(self, letter):
+        super().__init__(letter)
+
+    def get_move(self, game):
+        valid_position = False
+        val = None
+        while not valid_position:
+            position = input('Your Turn. Input move (1-9): ')
+            try:
+                val = int(position)
+                if val not in game.available_moves():
+                    raise ValueError
+                valid_position = True
+            except ValueError:
+                print('Invalid square. Try again.')
+        
+        return val
