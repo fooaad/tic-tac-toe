@@ -1,3 +1,4 @@
+from player import HumanPlayer, AiPlayer
 class TicTacToe():
     def __init__(self):
         self.board = [' ' for _ in range(9)]
@@ -59,3 +60,36 @@ class TicTacToe():
             return ret
         
         return False
+
+
+def play(game, x, o):
+    print('''Welcome to Tic-Tac-Toe!
+    | 1 | 2 | 3 |
+    | 4 | 5 | 6 |
+    | 7 | 8 | 9 |''')
+
+    letter = 'X'
+
+    while len(game.available_moves()) != 0:
+        if letter == 'X':
+            position = x.get_move(game)
+        else:
+            position = o.get_move(game)
+
+        if game.make_move(position, letter):
+            game.print_board()
+
+            if game.current_winner:
+                print(letter + ' wins!!!')
+                return letter
+            
+        letter = 'O' if letter == 'X' else 'X'  # switches player
+    
+    print('It\'s a tie!')
+
+
+if __name__ == '__main__':
+    x = AiPlayer('X')
+    o = HumanPlayer('O')
+    game = TicTacToe()
+    play(game, x, o)
